@@ -25,6 +25,7 @@ export class EstateController {
     @Body() body: CreateEstateDto,
     @CurrentUser() clerkId: string,
   ) {
+    console.log(body)
     return await this.estateService.createEstate(clerkId, body);
   }
 
@@ -70,6 +71,44 @@ export class EstateController {
   @Get()
   async getEstates(@Query() query: QueryDto) {
     return await this.estateService.getEstates(query);
+  }
+
+  @ApiOperation({ description: 'Get My Estates' })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page Number',
+    required: false,
+    schema: { default: 1 },
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Limit Number',
+    required: false,
+    schema: { default: 10 },
+  })
+  @ApiQuery({
+    name: 'sortField',
+    description: 'Field to sort',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'sortDirection',
+    description: 'Direction To Sort ASC | DESC',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'searchField',
+    description: 'Field Of Estate to search',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'searchValue',
+    description: 'Search Input',
+    required: false,
+  })
+  @Get("/user/my-estates")
+  async getMyEstates(@Query() query: QueryDto, @CurrentUser() clerkId: string) {
+    return await this.estateService.getMyEstates(query, clerkId);
   }
 
   @ApiOperation({ description: 'Delete Estate' })

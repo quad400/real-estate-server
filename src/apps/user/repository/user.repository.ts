@@ -16,7 +16,7 @@ export class UserRepository extends AbstractRepository<User> {
   }
 
   async findOne(filterQuery: FilterQuery<User>): Promise<User> {
-    const document = await this.model.findOne(filterQuery);
+    const document = await this.model.findOne(filterQuery, );
 
     if (!document) {
       throw new NotFoundException(
@@ -28,6 +28,14 @@ export class UserRepository extends AbstractRepository<User> {
 
     return document;
   }
+
+  async findOneWithoutCheck(filterQuery: FilterQuery<User>): Promise<User> {
+    const document = await this.model.findOne(filterQuery);
+
+    return document;
+  }
+
+
 
   async findOneAndUpdate(
     filterQuery: FilterQuery<User>,

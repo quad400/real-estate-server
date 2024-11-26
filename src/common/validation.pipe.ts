@@ -3,8 +3,10 @@ import { ValidationException } from './http.exception';
 
 export const ValidatorPipe = (): ValidationPipe => {
   return new ValidationPipe({
+
     exceptionFactory(errors) {
       const errorValues = errors.map((err) => {
+        console.log(err)
         if (err.constraints) {
           const [message] = Object.values(err.constraints);
           const fieldName = err.property;

@@ -8,9 +8,16 @@ import { ValidatorPipe } from './common/validation.pipe';
 import { HttpExceptions } from './common/http.exception';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   app.useGlobalPipes(ValidatorPipe());
+
+  app.enableCors({
+    origin: 'http://localhost:3000',  // Frontend URL (adjust accordingly)
+    credentials: true,  // Allow cookies and credentials to be sent
+    methods: 'GET, POST, PUT, DELETE',  // Allowed HTTP methods
+    allowedHeaders: 'Content-Type, Authorization',  // Allowed headers
+  });
 
   app.use(cookieParser());
   app.setGlobalPrefix('api/v1');
@@ -27,8 +34,8 @@ async function bootstrap() {
       'https://abdulquadri-portfolio.vercel.app/',
       'adedijiabdulquadri@gmail.com',
     )
-    .addTag("Real Estate")
-    .addCookieAuth("__session")
+    .addTag('Real Estate')
+    .addCookieAuth('__session')
     .build();
   const document = SwaggerModule.createDocument(app, config);
 

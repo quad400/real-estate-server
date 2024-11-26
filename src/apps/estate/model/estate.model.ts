@@ -15,6 +15,9 @@ export class Estate extends AbstractDocument {
   @Prop({ type: String, required: true })
   location: string;
 
+  @Prop({ type: String, required: true })
+  category: string;
+
   @Prop({ type: String })
   details: string;
 

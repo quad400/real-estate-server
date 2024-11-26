@@ -6,6 +6,7 @@ import { BaseResponse } from 'src/common/response/base.response';
 import { BusinessCode } from 'src/common/response/response.enum';
 import { QueryDto } from 'src/common/query.dto';
 import { v4 as uuidV4 } from 'uuid';
+import { clerkClient } from '@clerk/clerk-sdk-node';
 
 @Injectable()
 export class AgentService {
@@ -15,8 +16,19 @@ export class AgentService {
   ) {}
 
   async createAgent(clerkId: string, body: CreateAgentDto) {
-    console.log(body)
-    const user = await this.userRepository.findOne({ user_clerk_id: clerkId });
+    let user = await this.userRepository.findOneWithoutCheck({
+      user_clerk_id: clerkId,
+    });
+
+    if (!user) {
+      const clerk_user = await clerkClient.users.getUser(clerkId);
+
+      user = await this.userRepository.create({
+        user_clerk_id: clerkId,
+        email: clerk_user.emailAddresses[0].emailAddress,
+        name: `${clerk_user.firstName} ${clerk_user.lastName}`,
+      });
+    }
     await this.agentRepository.create({
       user: user._id,
       ...body,

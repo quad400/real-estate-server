@@ -20,6 +20,11 @@ export class CreateEstateDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
+  category: string;
+  
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   details: string;
   
   @ApiProperty()
@@ -38,6 +43,11 @@ export class UpdateEstateDto {
   @IsOptional()
   @IsString()
   price?: string;
+  
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  category?: string;
   
   @ApiProperty()
   @IsString()

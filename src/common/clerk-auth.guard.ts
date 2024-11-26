@@ -15,10 +15,7 @@ import { UserRepository } from 'src/apps/user/repository/user.repository';
 @Injectable()
 export class ClerkAuthGuard implements CanActivate {
   constructor(
-    private jwtService: JwtService,
     private reflector: Reflector,
-    private configService: ConfigService,
-    private userRepository: UserRepository,
   ) {}
 
   async canActivate(context: ExecutionContext) {
@@ -27,14 +24,14 @@ export class ClerkAuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+
+    console.log("reach here")
     if (isPublic) {
       return true;
     }
 
     const token = request.cookies.__session;
-    const tokenForPostman = this.extractTokenFromHeader(request);
-
-    if (!token && !tokenForPostman) {
+    if (!token) {
       throw new UnauthorizedException('Authentication token is missing');
     }
     try {
@@ -43,12 +40,6 @@ export class ClerkAuthGuard implements CanActivate {
 
         const user = await clerkClient.users.getUser(payload.sub);
         request['user_clerk_id'] = user.id;
-      } else if (tokenForPostman) {
-        const payload = await this.jwtService.verifyAsync(token, {
-          secret: this.configService.get('JWT_SECRET'),
-        });
-        const user = await this.userRepository.findById(payload.sub);
-        request['user_clerk_id'] = user.user_clerk_id;
       }
     } catch (e) {
       console.log(e);

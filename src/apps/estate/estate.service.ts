@@ -8,6 +8,7 @@ import { BusinessCode } from 'src/common/response/response.enum';
 import { QueryDto } from 'src/common/query.dto';
 import { CreateFeedbackDto, UpdateFeedbackDto } from './dto/feedback.dto';
 import { FeedbackRepository } from './repository/feedback.repository';
+import { clerkClient } from '@clerk/clerk-sdk-node';
 
 @Injectable()
 export class EstateService {
@@ -23,7 +24,7 @@ export class EstateService {
     const agent = await this.agentRepository.findOne({
       user: user._id,
     });
-    
+
     await this.estateRepository.create({ ...body, agent: agent._id });
     return BaseResponse.success({
       businessCode: BusinessCode.CREATED,
@@ -32,9 +33,9 @@ export class EstateService {
   }
 
   async getEstate(estateId: string) {
-    const estate = await (await this.estateRepository.findById(estateId)).populate(
-      'agent',
-    );
+    const estate = await (
+      await this.estateRepository.findById(estateId)
+    ).populate('agent');
     return BaseResponse.success({
       businessCode: BusinessCode.OK,
       businessDescription: 'Estate Fetched Successfully',
@@ -44,6 +45,24 @@ export class EstateService {
 
   async getEstates(query: QueryDto) {
     const estates = await this.estateRepository.findPaginated({ query });
+    return BaseResponse.success({
+      businessCode: BusinessCode.OK,
+      businessDescription: 'Estates Fetched Successfully',
+      data: estates,
+    });
+  }
+
+  async getMyEstates(query: QueryDto, clerkId: string) {
+    console.log(clerkId)
+    const user = await this.userRepository.findOne({ user_clerk_id: clerkId });
+    console.log(user)
+    const agent = await this.agentRepository.findOne({ user: user._id });
+
+    console.log(agent._id);
+    const estates = await this.estateRepository.findPaginated({
+      query,
+      filterQuery: { agent: agent._id },
+    });
     return BaseResponse.success({
       businessCode: BusinessCode.OK,
       businessDescription: 'Estates Fetched Successfully',
@@ -71,6 +90,7 @@ export class EstateService {
   }
 
   async deleteEstate(estateId: string, clerkId: string) {
+    console.log('Deleting');
     const user = await this.userRepository.findOne({ user_clerk_id: clerkId });
     const agent = await this.agentRepository.findOne({
       user: user._id,
@@ -82,7 +102,7 @@ export class EstateService {
     });
     return BaseResponse.success({
       businessCode: BusinessCode.OK,
-      businessDescription: 'Estate Updated Successfully',
+      businessDescription: 'Estate Deleted Successfully',
     });
   }
 
@@ -91,7 +111,20 @@ export class EstateService {
     estateId: string,
     body: CreateFeedbackDto,
   ) {
-    const user = await this.userRepository.findOne({ user_clerk_id: clerkId });
+    let user = await this.userRepository.findOneWithoutCheck({
+      user_clerk_id: clerkId,
+    });
+
+    if (!user) {
+      const clerk_user = await clerkClient.users.getUser(clerkId);
+
+      user = await this.userRepository.create({
+        user_clerk_id: clerkId,
+        email: clerk_user.emailAddresses[0].emailAddress,
+        name: `${clerk_user.firstName} ${clerk_user.lastName}`,
+      });
+    }
+
     const estate = await this.estateRepository.findById(estateId);
 
     await this.feedbackRepository.create({ user, estate, ...body });
