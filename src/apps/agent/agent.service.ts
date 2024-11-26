@@ -15,6 +15,7 @@ export class AgentService {
   ) {}
 
   async createAgent(clerkId: string, body: CreateAgentDto) {
+    console.log(body)
     const user = await this.userRepository.findOne({ user_clerk_id: clerkId });
     await this.agentRepository.create({
       user: user._id,

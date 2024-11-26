@@ -11,6 +11,9 @@ export class Agent extends AbstractDocument {
   @Prop({ type: String })
   organization_phone: string;
 
+  @Prop({ type: String })
+  organization_image: string;
+
   @Prop({ type: String, ref: 'User', required: true })
   user: string;
 }

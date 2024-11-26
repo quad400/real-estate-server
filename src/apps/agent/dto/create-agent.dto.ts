@@ -10,4 +10,8 @@ export class CreateAgentDto {
   @IsString()
   @IsNotEmpty()
   organization_phone: string;
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  organization_image: string;
 }
