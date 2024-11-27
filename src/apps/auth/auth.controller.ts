@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Public } from 'src/common/jwt.strategy';
+import { Public } from '../../common/jwt.strategy';
 import { Response } from 'express';
 
 @Public()

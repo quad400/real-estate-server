@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateAgentDto } from './dto/create-agent.dto';
 import { AgentRepository } from './repository/agent.repository';
 import { UserRepository } from '../user/repository/user.repository';
-import { BaseResponse } from 'src/common/response/base.response';
-import { BusinessCode } from 'src/common/response/response.enum';
-import { QueryDto } from 'src/common/query.dto';
+import { BaseResponse } from '../../common/response/base.response';
+import { BusinessCode } from '../../common/response/response.enum';
+import { QueryDto } from '../../common/query.dto';
 import { v4 as uuidV4 } from 'uuid';
 import { clerkClient } from '@clerk/clerk-sdk-node';
 

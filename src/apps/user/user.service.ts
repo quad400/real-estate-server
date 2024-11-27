@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './repository/user.repository';
-import { BaseResponse } from 'src/common/response/base.response';
-import { BusinessCode } from 'src/common/response/response.enum';
+import { BaseResponse } from '../../common/response/base.response';
+import { BusinessCode } from '../../common/response/response.enum';
 
 @Injectable()
 export class UserService {

@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { AgentService } from './agent.service';
-import { CurrentUser } from 'src/common/current-user.decorator';
+import { CurrentUser } from '../../common/current-user.decorator';
 import { CreateAgentDto } from './dto/create-agent.dto';
-import { QueryDto } from 'src/common/query.dto';
+import { QueryDto } from '../../common/query.dto';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @Controller('agents')

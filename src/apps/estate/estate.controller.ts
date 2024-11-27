@@ -9,12 +9,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { EstateService } from './estate.service';
-import { CurrentUser } from 'src/common/current-user.decorator';
+import { CurrentUser } from '../../common/current-user.decorator';
 import { CreateEstateDto, UpdateEstateDto } from './dto/estate.dto';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { QueryDto } from 'src/common/query.dto';
+import { QueryDto } from '../../common/query.dto';
 import { CreateFeedbackDto, UpdateFeedbackDto } from './dto/feedback.dto';
-import { Public } from 'src/common/jwt.strategy';
+import { Public } from '../../common/jwt.strategy';
 
 @Controller('estates')
 export class EstateController {

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AbstractDocument } from 'src/common/db/abstract.schema';
+import { AbstractDocument } from '../../../common/db/abstract.schema';
 
 @Schema({ versionKey: false, timestamps: true })
 export class Feedback extends AbstractDocument {

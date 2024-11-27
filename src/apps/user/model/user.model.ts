@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AbstractDocument } from 'src/common/db/abstract.schema';
+import { AbstractDocument } from '../../../common/db/abstract.schema';
 
 export type UserDocument = User & Document;
 

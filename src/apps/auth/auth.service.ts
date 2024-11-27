@@ -2,10 +2,11 @@ import * as bcrypt from 'bcrypt';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRepository } from '../user/repository/user.repository';
 import { CreateUserDto } from './dto/create-user.dto';
-import { BaseResponse } from 'src/common/response/base.response';
-import { BusinessCode } from 'src/common/response/response.enum';
+import { BaseResponse } from '../../common/response/base.response';
+import { BusinessCode } from '../../common/response/response.enum';
 import { JwtService } from '@nestjs/jwt';
 import { clerkClient } from '@clerk/clerk-sdk-node';
+
 
 @Injectable()
 export class AuthService {
