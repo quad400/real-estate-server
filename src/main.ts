@@ -13,10 +13,10 @@ async function bootstrap() {
   app.useGlobalPipes(ValidatorPipe());
 
   app.enableCors({
-    origin: 'http://localhost:3000',  // Frontend URL (adjust accordingly)
-    credentials: true,  // Allow cookies and credentials to be sent
-    methods: 'GET, POST, PUT, DELETE',  // Allowed HTTP methods
-    allowedHeaders: 'Content-Type, Authorization',  // Allowed headers
+    origin: 'http://localhost:3000', // Frontend URL (adjust accordingly)
+    credentials: true, // Allow cookies and credentials to be sent
+    methods: 'GET, POST, PUT, DELETE', // Allowed HTTP methods
+    allowedHeaders: 'Content-Type, Authorization', // Allowed headers
   });
 
   app.use(cookieParser());
@@ -36,11 +36,21 @@ async function bootstrap() {
     )
     .addTag('Real Estate')
     .addCookieAuth('__session')
+
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('api/v1/api-docs', app, document, {
     explorer: true,
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
+    ],
+    customCssUrl: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
+    ],
   });
   const configService = app.get(ConfigService);
 
