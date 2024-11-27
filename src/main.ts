@@ -11,7 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
   app.useGlobalPipes(ValidatorPipe());
-  app.useStaticAssets(join(__dirname, '..', 'public'));
+  
   app.enableCors({
     origin: 'http://localhost:3000',  // Frontend URL (adjust accordingly)
     credentials: true,  // Allow cookies and credentials to be sent
