@@ -23,6 +23,9 @@ export class Estate extends AbstractDocument {
 
   @Prop({ type: String, ref: 'Agent', required: true })
   agent: string;
+
+  @Prop({type: Number, default: 0})
+  ratings: number
 }
 
 export const EstateSchema = SchemaFactory.createForClass(Estate);

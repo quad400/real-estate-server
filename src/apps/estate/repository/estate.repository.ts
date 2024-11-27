@@ -85,4 +85,6 @@ export class EstateRepository extends AbstractRepository<Estate> {
       items,
     };
   }
+
+
 }

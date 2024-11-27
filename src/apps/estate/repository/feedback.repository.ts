@@ -85,4 +85,14 @@ export class FeedbackRepository extends AbstractRepository<Feedback> {
       items,
     };
   }
+
+  async calculateAverageRating(estateId: string): Promise<number> {
+    const feedbacks = await this.model.aggregate([
+      { $match: { estate: estateId } },
+      { $group: { _id: '$estate', averageRating: { $avg: '$rate' } } },
+    ]);
+
+    // Return the average rating, or 0 if no feedback exists
+    return feedbacks.length > 0 ? feedbacks[0].averageRating : 0;
+  }
 }

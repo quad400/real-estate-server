@@ -43,6 +43,15 @@ export class EstateService {
     });
   }
 
+  async updateEstateRatings(estateId: string): Promise<void> {
+    const averageRating =
+      await this.feedbackRepository.calculateAverageRating(estateId);
+    await this.estateRepository.findOneAndUpdate(
+      { _id: estateId },
+      { ratings: averageRating },
+    );
+  }
+
   async getEstates(query: QueryDto) {
     const estates = await this.estateRepository.findPaginated({ query });
     return BaseResponse.success({
@@ -53,9 +62,9 @@ export class EstateService {
   }
 
   async getMyEstates(query: QueryDto, clerkId: string) {
-    console.log(clerkId)
+    console.log(clerkId);
     const user = await this.userRepository.findOne({ user_clerk_id: clerkId });
-    console.log(user)
+    console.log(user);
     const agent = await this.agentRepository.findOne({ user: user._id });
 
     console.log(agent._id);
@@ -128,6 +137,8 @@ export class EstateService {
     const estate = await this.estateRepository.findById(estateId);
 
     await this.feedbackRepository.create({ user, estate, ...body });
+    await this.updateEstateRatings(estateId);
+
     return BaseResponse.success({
       businessCode: BusinessCode.CREATED,
       businessDescription: 'Feedback Created Successfully',
@@ -143,8 +154,11 @@ export class EstateService {
     });
   }
 
-  async getFeedbacks(query: QueryDto) {
-    const feedbacks = await this.feedbackRepository.findPaginated({ query });
+  async getFeedbacks(query: QueryDto, estateId: string) {
+    const feedbacks = await this.feedbackRepository.findPaginated({
+      query,
+      filterQuery: { estate: estateId },
+    });
     return BaseResponse.success({
       businessCode: BusinessCode.OK,
       businessDescription: 'Feedbacks Fetched Successfully',

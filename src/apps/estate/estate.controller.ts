@@ -14,6 +14,7 @@ import { CreateEstateDto, UpdateEstateDto } from './dto/estate.dto';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { QueryDto } from 'src/common/query.dto';
 import { CreateFeedbackDto, UpdateFeedbackDto } from './dto/feedback.dto';
+import { Public } from 'src/common/jwt.strategy';
 
 @Controller('estates')
 export class EstateController {
@@ -29,12 +30,14 @@ export class EstateController {
     return await this.estateService.createEstate(clerkId, body);
   }
 
+  @Public()
   @ApiOperation({ description: 'Get Estate By Id' })
   @Get('/:estateId')
   async getEstate(@Param('estateId') estateId: string) {
     return await this.estateService.getEstate(estateId);
   }
 
+  @Public()
   @ApiOperation({ description: 'Get Estates' })
   @ApiQuery({
     name: 'page',
@@ -146,6 +149,7 @@ export class EstateController {
     return await this.estateService.getFeedback(feedbackId);
   }
 
+  @Public()
   @ApiOperation({ description: 'Get Feedbacks' })
   @ApiQuery({
     name: 'page',
@@ -180,8 +184,8 @@ export class EstateController {
     required: false,
   })
   @Get('/:estateId/feedbacks')
-  async getFeeedbacks(@Query() query: QueryDto) {
-    return await this.estateService.getFeedbacks(query);
+  async getFeeedbacks(@Query() query: QueryDto, @Param("estateId") estateId: string) {
+    return await this.estateService.getFeedbacks(query, estateId);
   }
 
   @ApiOperation({ description: 'Update Feedback' })
