@@ -14,7 +14,7 @@ import { EstateModule } from './apps/estate/estate.module';
 @Module({
   imports: [
     AppConfigModule,
-    ModelModule,
+    // ModelModule,
     DatabaseModule,
     // AuthModule,
     UserModule,
